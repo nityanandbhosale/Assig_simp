@@ -1,6 +1,4 @@
 
-
-
 export class HotelBook {
     element = {
         url: 'https://www.trip.com/',
@@ -17,9 +15,9 @@ export class HotelBook {
         mResult: '.room-guest',
         selHotel: 'ul[class="long-list long-list-v8"]>li',
         SelRm: '.detail-headline-price-v8_select',
-        bookR:'.book-box',
-        verDate:'.m-roomsB-v8_left',
-        verPrise:'.m-newPerNightPriceDetail_total_content_wrap'
+        bookR: '.book-box',
+        verDate: '.m-roomsB-v8_left',
+        verPrise: '.m-newPerNightPriceDetail_total_content_wrap'
 
     }
 
@@ -80,32 +78,55 @@ export class HotelBook {
     }
 
     selectHotel() {
-        cy.get('[class="long-list long-list-v8"]').scrollIntoView().should('be.visible')
-        cy.wait(30000)
+        // cy.get('[class="main-container main-content"]').should('be.visible')
+        // cy.scrollTo('bottom')
+        // cy.get('[class="main-container main-content"]').should('be.visible')
+        // cy.scrollTo('bottom')
+        // cy.get('[class="main-container main-content"]').should('be.visible')
+        // cy.scrollTo('bottom')
+        function recursivelyScroll() {
+            cy.get('ul[class="long-list long-list-v8"]').should('be.visible')
+            cy.scrollTo('bottom');
+
+            cy.get('ul[class="long-list long-list-v8"]')
+                .then($el => {
+                    // If the element contains a loading class, we wait one second and scroll down again
+                    if ($el.find().length > 0) {
+                        setTimeout(recursivelyScroll, 1000);
+                    } else {
+                        // We are done waiting, no more loading is needed
+                        // write test here
+
+                        // done();
+                    }
+                });
+        }
+        recursivelyScroll();
+
         cy.window().then(win => {
             cy.stub(win, 'open').callsFake((url, target) => {
 
                 return win.open.wrappedMethod.call(win, url, '_self')
             }).as('open');
-            cy.get('.list-card-title').eq(9).click({ force: true })
+            cy.get('.long-list >li').find('.list-card-tagAndTitle').eq(9).click({ force: true })
             cy.get('@open');
         });
     }
 
-    selectRoom(){
+    selectRoom() {
         cy.get(this.element.SelRm).click()
-        
+
     }
 
-    bookRoom(){
+    bookRoom() {
         cy.get(this.element.bookR).first().click()
         cy.wait(5000)
         cy.get('[class="m-confirm v8-BorderRadius popIn"]').find('.m-confirm_btn >span').click()
     }
 
-    verDatePrise(date){
+    verDatePrise() {
         cy.get(this.element.verDate).find('div').first().should('be.visible')
         cy.get('[class="price-container-v8"]').invoke('show').find(this.element.verPrise).find('[class="price"]').should('be.visible')
-        
+
     }
 }

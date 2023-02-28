@@ -1,3 +1,13 @@
 {
-    "testFiles": "**/*.{feature,features}"
+    "testFiles": "**/*.{feature,features}",
+    "failOnStatusCode": false,
+    "ensureScrollable": false,
+    "baseUrl":"https://www.qa-website.com",
+    "experimentalSessionAndOrigin":true,
+    "env":{
+        "googleClientId":"230236984129-aue0mcqu0pqrlrqgembupr0302gedqc4.apps.googleusercontent.com",
+        "googleClientSecret" :"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",
+        "googleRefreshToken" :"1//04euEsCxmHMVWCgYIARAAGAQSNwF-L9IrmeEwJnC_1HANYxTYXgxJbBYoAyl9l1tCkSUTH-pHJoNE1xYkVo1ea5p5qkrqhgaaWrU"
+
+    }
 }
